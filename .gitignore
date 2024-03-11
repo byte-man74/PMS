@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local development settings
+local_settings.py
+
+# Database
+db.sqlite3
+
+# Static files
+staticfiles/
+*.pyc
+
+# Media files
+media/
+
+# Virtual environment
+venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Python environment
+*.pyc
+*.pyo
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Ignore the secret key file in production
+secret_key.txt
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+.coverage.*
