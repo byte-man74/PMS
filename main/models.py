@@ -53,25 +53,30 @@ class Patient(models.Model):
     imaging_reports = models.TextField()
 
     # Treatment Plans
-    prescribed_medications = models.TextField()
-    treatment_procedures = models.TextField()
-    specialist_referrals = models.TextField()
+    prescribed_medications = models.TextField(null=True)
+    treatment_procedures = models.TextField(null=True)
+    specialist_referrals = models.TextField(null=True)
 
     # Notes and Observations
-    physician_notes = models.TextField()
-    nurse_observations = models.TextField()
-    progress_notes = models.TextField()
+    physician_notes = models.TextField(null=True)
+    nurse_observations = models.TextField(null=True)
+    progress_notes = models.TextField(null=True)
 
     # Emergency Contacts
-    emergency_contact_name = models.CharField(max_length=255)
-    emergency_contact_phone = models.CharField(max_length=20)
+    emergency_contact_name = models.CharField(max_length=255, null=True)
+    emergency_contact_phone = models.CharField(max_length=20, null=True)
 
     # Consent Forms
-    treatment_consent = models.BooleanField()
-    data_sharing_consent = models.BooleanField()
+    treatment_consent = models.BooleanField(default= True)
+    data_sharing_consent = models.BooleanField(default=True)
+    
 
     # Communication Logs
     communication_logs = models.TextField()
+
+
+    #hospital registration 
+    registered_by = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.full_name
