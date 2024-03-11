@@ -6,7 +6,16 @@ class Hospital (models.Model):
     description = models.TextField()
 
 
+    def __str__(self):
+        return self.name
+    
+
+
 class Patient (models.Model):
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
+
+
+    def __str__(self):
+        return self.first_name
     
