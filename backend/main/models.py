@@ -11,7 +11,6 @@ class Hospital (models.Model):
     
 
 
-
 class Patient(models.Model):
     # Personal Information
     full_name = models.CharField(max_length=255)
