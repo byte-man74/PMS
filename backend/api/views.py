@@ -14,9 +14,9 @@ class RegisterView(APIView):
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
         user = User.objects.create_user(username=username, password=password)
-        Token.objects.create(user=user)
+        token = Token.objects.create(user=user)
 
-        return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'User registered successfully', 'token': token.key}, status=status.HTTP_201_CREATED)
 
 
 class LoginView(APIView):
