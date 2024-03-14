@@ -38,10 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    ###custom
-    "Authentication",
-    "Api",
-    "main"
+    # custom
+    "main",
 ]
 
 MIDDLEWARE = [
