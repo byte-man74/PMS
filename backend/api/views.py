@@ -43,3 +43,14 @@ class PatientListCreateAPIView(generics.ListCreateAPIView):
 class PatientRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
+
+
+class GetPatientByID(APIView):
+    def post(self, request):
+        payload = request.data.get('ID')  # Use request.data for POST requests
+
+        try:
+            patient_instance = Patient.objects.get(id=payload)
+            return Response({'data': patient_instance}, status=status.HTTP_200_OK)
+        except Patient.DoesNotExist:
+            return Response({'error': 'No patient exists with that ID'}, status=status.HTTP_404_NOT_FOUND)

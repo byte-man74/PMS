@@ -1,83 +1,74 @@
+import random
 from django.db import models
+from faker import Faker
+from datetime import timedelta
 
+fake = Faker()
 # Create your models here.
+
+
 class Hospital (models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField()
 
-
     def __str__(self):
         return self.name
-    
 
 
 class Patient(models.Model):
     # Personal Information
-    full_name = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=50)
     date_of_birth = models.DateField()
-    gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')])
-    address = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=20)
-    email = models.EmailField()
-    national_id = models.CharField(max_length=20)
+    gender = models.CharField(max_length=10, choices=[(
+        'M', 'Male'), ('F', 'Female'), ('O', 'Other')])
+    email = models.EmailField(null=True, blank=True)  # Optional
+    phone_number = models.CharField(
+        max_length=20, null=True, blank=True)  # Optional
+    emergency_contact_name = models.CharField(
+        max_length=255, null=True, blank=True)  # Optional
+    emergency_contact_phone = models.CharField(
+        max_length=20, null=True, blank=True)  # Optional
 
-    # Medical History
-    allergies = models.TextField()
-    medical_conditions = models.TextField()
-    medications = models.TextField()
-    surgical_history = models.TextField()
+    # Medical Information
+    blood_type = models.CharField(max_length=10, choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), (
+        'B-', 'B-'), ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')], null=True, blank=True)
+    allergies = models.CharField(
+        max_length=255, null=True, blank=True)  # Summarized list
 
-    # Vital Signs
-    blood_pressure = models.CharField(max_length=20)
-    heart_rate = models.IntegerField()
-    respiratory_rate = models.IntegerField()
-    body_temperature = models.FloatField()
-
-    # Appointments and Scheduling
-    appointment_date_time = models.DateTimeField()
-    visit_history = models.TextField()
-    procedures_tests = models.TextField()
-
-    # Insurance Information
-    insurance_provider = models.CharField(max_length=255)
-    policy_number = models.CharField(max_length=50)
-    coverage_details = models.TextField()
-
-    # Billing and Payments
-    invoicing_details = models.TextField()
-    payment_history = models.TextField()
-
-    # Diagnostic Reports
-    lab_test_results = models.TextField()
-    imaging_reports = models.TextField()
-
-    # Treatment Plans
-    prescribed_medications = models.TextField(null=True)
-    treatment_procedures = models.TextField(null=True)
-    specialist_referrals = models.TextField(null=True)
-
-    # Notes and Observations
-    physician_notes = models.TextField(null=True)
-    nurse_observations = models.TextField(null=True)
-    progress_notes = models.TextField(null=True)
-
-    # Emergency Contacts
-    emergency_contact_name = models.CharField(max_length=255, null=True)
-    emergency_contact_phone = models.CharField(max_length=20, null=True)
-
-    # Consent Forms
-    treatment_consent = models.BooleanField(default= True)
-    data_sharing_consent = models.BooleanField(default=True)
-    
-
-    # Communication Logs
-    communication_logs = models.TextField()
-
-
-    #hospital registration 
-    registered_by = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True)
+    # Hospital registration
+    registered_by = models.ForeignKey(
+        'Hospital', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.full_name
+        return f"{self.full_name}"
 
-    
+
+def create_mock_patient():
+    full_name = fake.first_name() + " " + fake.last_name()
+
+    date_of_birth = fake.date_object() - timedelta(days=fake.random.randint(30,
+                                                                            365 * 100))  # Adjust max age as needed
+    blood_types = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
+    chosen_blood_type = random.choice(blood_types)
+
+    gender = 'M'
+    email = fake.email()
+    phone_number = fake.phone_number()
+    emergency_contact_name = fake.name()
+    emergency_contact_phone = fake.phone_number()
+    blood_type = chosen_blood_type
+
+    # Generate a comma-separated list of allergies
+    allergies = ', '.join(fake.words(nb=2))
+
+    return Patient(
+        full_name=full_name,
+        date_of_birth=date_of_birth,
+        gender=gender,
+        email=email,
+        phone_number=phone_number,
+        emergency_contact_name=emergency_contact_name,
+        emergency_contact_phone=emergency_contact_phone,
+        blood_type=blood_type,
+        allergies=allergies,
+    )
