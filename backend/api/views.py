@@ -1,4 +1,11 @@
 from .imports import *
+from rest_framework import serializers
+
+class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = '__all__'
+
 
 class RegisterView(APIView):
     permission_classes = (AllowAny,)
@@ -51,6 +58,7 @@ class GetPatientByID(APIView):
 
         try:
             patient_instance = Patient.objects.get(id=payload)
-            return Response({'data': patient_instance}, status=status.HTTP_200_OK)
+            serializer = PatientSerializer(patient_instance)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Patient.DoesNotExist:
             return Response({'error': 'No patient exists with that ID'}, status=status.HTTP_404_NOT_FOUND)
